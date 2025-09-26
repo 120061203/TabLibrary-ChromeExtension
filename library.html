@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Library</title>
+    <link rel="stylesheet" href="library.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="title-group">
+        <h1>Page Library</h1>
+        <p class="subtitle">快速整理、搜尋、保存並分享你的分頁收藏</p>
+      </div>
+      <div class="actions">
+        <label class="field">
+          <span class="field-label">搜尋</span>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="搜尋標題、網址或標籤..."
+            aria-label="搜尋分頁"
+          />
+        </label>
+        <button id="refresh-button" type="button" class="primary">重新整理</button>
+      </div>
+    </header>
+
+    <section class="toolbar" aria-label="檢視設定">
+      <label class="field">
+        <span class="field-label">分類依據</span>
+        <select id="grouping-select" aria-label="選擇分類依據">
+          <option value="none">不分類</option>
+          <option value="window">視窗</option>
+          <option value="domain">網域</option>
+          <option value="tag">標籤</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">排序方式</span>
+        <select id="sort-select" aria-label="選擇排序方式">
+          <option value="lastAccessed-desc">最近使用</option>
+          <option value="title-asc">標題 A → Z</option>
+          <option value="title-desc">標題 Z → A</option>
+          <option value="domain-asc">網域 A → Z</option>
+        </select>
+      </label>
+      <div class="toolbar-buttons">
+        <button id="toggle-selection-mode" type="button" aria-pressed="false">
+          開啟多選
+        </button>
+        <button id="export-button" type="button">匯出 JSON</button>
+        <button id="copy-button" type="button">複製清單</button>
+      </div>
+    </section>
+
+    <section id="bulk-actions" class="bulk-actions" hidden>
+      <p id="selection-count" class="selection-count">已選取 0 個分頁</p>
+      <div class="bulk-buttons">
+        <button id="select-all-button" type="button">全選</button>
+        <button id="clear-selection-button" type="button">清除選取</button>
+        <button id="bulk-focus-button" type="button">切換至第一個</button>
+        <button id="bulk-close-button" type="button" class="danger">關閉選取</button>
+        <button id="bulk-pin-button" type="button">釘選/取消釘選</button>
+        <button id="bulk-new-window-button" type="button">移到新視窗</button>
+        <button id="bulk-group-button" type="button">建立分頁群組</button>
+      </div>
+    </section>
+
+    <main>
+      <div class="main-columns">
+        <section class="primary-column" aria-live="polite">
+          <div id="cards-container" class="cards"></div>
+          <section id="empty-state" class="empty-state" hidden>
+            <h2>目前沒有符合條件的分頁</h2>
+            <p>試著調整搜尋或分類條件，或在瀏覽器開啟新的分頁。</p>
+          </section>
+        </section>
+        <aside class="secondary-column" aria-label="分頁快照與設定">
+          <section class="snapshot-panel">
+            <header class="panel-header">
+              <h2>分頁快照</h2>
+              <div class="panel-actions">
+                <button id="save-snapshot-button" type="button" class="primary">
+                  儲存快照
+                </button>
+                <button id="clear-snapshots-button" type="button">全部清除</button>
+              </div>
+            </header>
+            <p class="panel-description">
+              將目前所有分頁與視窗儲存成快照，日後可一鍵回復工作狀態。
+            </p>
+            <ul id="snapshot-list" class="snapshot-list" aria-live="polite"></ul>
+          </section>
+
+          <section class="preferences-panel">
+            <header class="panel-header">
+              <h2>個人化設定</h2>
+            </header>
+            <form id="preferences-form" class="preferences-form">
+              <label class="field">
+                <span class="field-label">預設分類</span>
+                <select name="defaultGrouping" aria-label="預設分類">
+                  <option value="none">不分類</option>
+                  <option value="window">視窗</option>
+                  <option value="domain">網域</option>
+                  <option value="tag">標籤</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">預設排序</span>
+                <select name="defaultSorting" aria-label="預設排序">
+                  <option value="lastAccessed-desc">最近使用</option>
+                  <option value="title-asc">標題 A → Z</option>
+                  <option value="title-desc">標題 Z → A</option>
+                  <option value="domain-asc">網域 A → Z</option>
+                </select>
+              </label>
+              <label class="checkbox-field">
+                <input type="checkbox" name="hideDiscarded" />
+                <span>隱藏已卸載的分頁</span>
+              </label>
+              <label class="checkbox-field">
+                <input type="checkbox" name="autoRefreshOnFocus" />
+                <span>回到此頁面時自動刷新</span>
+              </label>
+              <button type="submit" class="primary">儲存設定</button>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <template id="tab-group-template">
+      <section class="tab-group">
+        <header class="group-header">
+          <h2 class="group-title"></h2>
+          <span class="group-count"></span>
+        </header>
+        <div class="group-cards"></div>
+      </section>
+    </template>
+
+    <template id="tab-card-template">
+      <article class="tab-card" tabindex="0">
+        <header>
+          <div class="card-leading">
+            <input class="tab-checkbox" type="checkbox" aria-label="選擇分頁" hidden />
+            <img class="favicon" alt="" />
+          </div>
+          <div class="tab-texts">
+            <div class="tab-title-row">
+              <h3 class="tab-title"></h3>
+              <span class="badge pinned" hidden>📌</span>
+              <span class="badge audible" hidden>🔊</span>
+            </div>
+            <p class="tab-url"></p>
+            <p class="tab-meta"></p>
+            <div class="tag-area">
+              <ul class="tag-list"></ul>
+              <button class="add-tag-button" type="button">＋ 標籤</button>
+            </div>
+          </div>
+        </header>
+        <footer>
+          <div class="footer-left">
+            <span class="last-access"></span>
+          </div>
+          <div class="footer-right">
+            <button class="focus-button" type="button">切換</button>
+            <button class="mute-button" type="button">靜音</button>
+            <button class="close-button" type="button">關閉</button>
+          </div>
+        </footer>
+      </article>
+    </template>
+
+    <template id="tag-chip-template">
+      <li class="tag-chip">
+        <span class="tag-text"></span>
+        <button class="remove-tag" type="button" aria-label="移除標籤">×</button>
+      </li>
+    </template>
+
+    <template id="snapshot-item-template">
+      <li class="snapshot-item">
+        <div class="snapshot-texts">
+          <p class="snapshot-title"></p>
+          <p class="snapshot-meta"></p>
+        </div>
+        <div class="snapshot-buttons">
+          <button class="restore-snapshot" type="button">回復</button>
+          <button class="delete-snapshot" type="button">刪除</button>
+        </div>
+      </li>
+    </template>
+
+    <dialog id="tag-dialog" class="tag-dialog">
+      <form method="dialog" class="tag-dialog-form">
+        <h3>為分頁新增標籤</h3>
+        <p class="dialog-url"></p>
+        <label class="field">
+          <span class="field-label">標籤（以逗號分隔）</span>
+          <input id="tag-input" type="text" autocomplete="off" />
+        </label>
+        <menu>
+          <button value="cancel">取消</button>
+          <button id="tag-dialog-save" value="default" class="primary">儲存</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <output id="toast" class="toast" role="status" aria-live="polite" hidden></output>
+
+    <script type="module" src="library.js"></script>
+  </body>
+</html>

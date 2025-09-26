@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Page Library",
+  "description": "將目前開啟的所有分頁整理成卡片頁面，方便快速尋找與切換。",
+  "version": "0.2.0",
+  "action": {
+    "default_title": "開啟 Page Library"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "tabs",
+    "tabGroups",
+    "windows",
+    "storage",
+    "sessions"
+  ]
+}
