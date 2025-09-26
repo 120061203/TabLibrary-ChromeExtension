@@ -19,7 +19,9 @@
           placeholder="搜尋標題或網址..."
           aria-label="搜尋分頁"
         />
-        <button id="refresh-button" type="button">重新整理</button>
+        <button id="refresh-button" class="md-button md-button--filled" type="button">
+          重新整理
+        </button>
       </div>
     </header>
 
@@ -41,7 +43,9 @@
           <option value="domain-asc">網域 A → Z</option>
         </select>
       </label>
-      <button id="export-button" type="button">匯出 JSON</button>
+      <button id="export-button" class="md-button md-button--filled" type="button">
+        匯出 JSON
+      </button>
     </section>
 
     <main>
@@ -63,7 +67,7 @@
     </template>
 
     <template id="tab-card-template">
-      <article class="tab-card">
+      <article class="tab-card md-card">
         <header>
           <img class="favicon" alt="" />
           <div class="tab-texts">
@@ -74,8 +78,12 @@
         <footer>
           <span class="tab-meta"></span>
           <div class="tab-actions">
-            <button class="focus-button" type="button">切換</button>
-            <button class="close-button" type="button">關閉</button>
+            <button class="focus-button md-button md-button--tonal" type="button">
+              切換
+            </button>
+            <button class="close-button md-button md-button--error" type="button">
+              關閉
+            </button>
           </div>
         </footer>
       </article>
