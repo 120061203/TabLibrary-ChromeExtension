@@ -1,3 +1,9 @@
+---
+layout: default
+title: Privacy Policy
+permalink: /privacy-policy
+---
+
 # Tab Library 隱私權政策
 
 更新日期：2025-09-26

@@ -1,3 +1,8 @@
+---
+layout: default
+title: README
+---
+
 # Tab Library
 
 Tab Library 是一款 Chrome 擴充功能，協助你將目前開啟的所有分頁以卡片方式整理、搜尋與管理，適合一次開啟大量分頁但又希望快速切換或匯出的使用者。
