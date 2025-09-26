@@ -585,7 +585,7 @@ async function bulkCreateGroup() {
   if (!state.selectedTabIds.size) {
     return;
   }
-  const title = window.prompt('請輸入新的分頁群組名稱', 'Page Library');
+  const title = window.prompt('請輸入新的分頁群組名稱', 'TabLibrary');
   if (title === null) {
     return;
   }

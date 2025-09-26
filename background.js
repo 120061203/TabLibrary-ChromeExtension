@@ -14,6 +14,6 @@ chrome.action.onClicked.addListener(async () => {
 
     await chrome.tabs.create({ url: libraryUrl });
   } catch (error) {
-    console.error('Failed to open Page Library:', error);
+    console.error('Failed to open TabLibrary:', error);
   }
 });
