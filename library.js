@@ -311,6 +311,18 @@ async function refreshTabs() {
   applyFilterAndRender();
 }
 
+async function handleManualRefresh() {
+  if (refreshButton.disabled) {
+    return;
+  }
+  refreshButton.disabled = true;
+  await refreshTabs();
+  showToast('已重新整理');
+  setTimeout(() => {
+    refreshButton.disabled = false;
+  }, 400);
+}
+
 async function exportToJson() {
   if (!state.filteredTabs.length) {
     showToast('目前沒有可匯出的分頁');
@@ -405,7 +417,6 @@ async function importFromJsonFile(file) {
 }
 
 function setupEventListeners() {
-  refreshButton.addEventListener('click', refreshTabs);
   searchInput.addEventListener('input', applyFilterAndRender);
   groupingSelect.addEventListener('change', () => {
     state.grouping = groupingSelect.value;
@@ -415,6 +426,7 @@ function setupEventListeners() {
     state.sorting = sortSelect.value;
     applyFilterAndRender();
   });
+  refreshButton.addEventListener('click', handleManualRefresh);
   importButton.addEventListener('click', () => {
     importInput.value = '';
     importInput.click();

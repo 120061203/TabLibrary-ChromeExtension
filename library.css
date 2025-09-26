@@ -127,6 +127,15 @@ select {
   letter-spacing: 0.02em;
 }
 
+.md-button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.md-button[disabled]::after {
+  display: none;
+}
+
 .md-button::after {
   content: '';
   position: absolute;
