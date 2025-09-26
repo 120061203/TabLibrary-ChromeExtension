@@ -4,10 +4,22 @@
   "description": "將目前開啟的所有分頁整理成卡片頁面，方便快速尋找與切換。",
   "version": "0.1.0",
   "action": {
-    "default_title": "開啟 Tab Library"
+    "default_title": "開啟 Tab Library",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png",
+    "256": "icons/icon256.png",
+    "512": "icons/icon512.png"
   },
   "permissions": [
     "tabs",
