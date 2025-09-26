@@ -71,12 +71,13 @@ function getUrlKey(url) {
   }
 }
 
-const hasChromeStorageSync = Boolean(chrome.storage && chrome.storage.sync);
+const storageSync = globalThis.chrome?.storage?.sync;
+const hasChromeStorageSync = Boolean(storageSync);
 
 function storageGet(key) {
   if (hasChromeStorageSync) {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(key, resolve);
+      storageSync.get(key, resolve);
     });
   }
 
@@ -93,7 +94,7 @@ function storageGet(key) {
 function storageSet(items) {
   if (hasChromeStorageSync) {
     return new Promise((resolve) => {
-      chrome.storage.sync.set(items, resolve);
+      storageSync.set(items, resolve);
     });
   }
 
