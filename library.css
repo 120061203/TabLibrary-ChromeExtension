@@ -340,6 +340,7 @@ main {
 
 .tab-texts {
   min-width: 0;
+  padding-right: 2.6rem;
 }
 
 .tab-title {
