@@ -4,7 +4,9 @@ const searchInput = document.getElementById('search-input');
 const refreshButton = document.getElementById('refresh-button');
 const groupingSelect = document.getElementById('grouping-select');
 const sortSelect = document.getElementById('sort-select');
+const importButton = document.getElementById('import-button');
 const exportButton = document.getElementById('export-button');
+const importInput = document.getElementById('import-input');
 const toast = document.getElementById('toast');
 
 const tabGroupTemplate = document.getElementById('tab-group-template');
@@ -329,6 +331,65 @@ async function exportToJson() {
   showToast('已匯出 JSON');
 }
 
+async function importFromJsonFile(file) {
+  if (!file) {
+    return;
+  }
+
+  try {
+    const text = await file.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      showToast('JSON 格式錯誤，無法解析');
+      return;
+    }
+
+    const tabs = Array.isArray(data.tabs) ? data.tabs : [];
+    const validTabs = tabs.filter((item) => typeof item?.url === 'string' && item.url.length > 0);
+
+    if (!validTabs.length) {
+      showToast('匯入檔案沒有可開啟的網址');
+      return;
+    }
+
+    const confirmed = window.confirm(`即將匯入並開啟 ${validTabs.length} 個分頁，是否繼續？`);
+    if (!confirmed) {
+      return;
+    }
+
+    let openedCount = 0;
+    for (let index = 0; index < validTabs.length; index += 1) {
+      const tabData = validTabs[index];
+      try {
+        const createdTab = await chrome.tabs.create({
+          url: tabData.url,
+          active: index === 0
+        });
+
+        if (tabData.pinned) {
+          await chrome.tabs.update(createdTab.id, { pinned: true });
+        }
+
+        openedCount += 1;
+      } catch (error) {
+        console.error('匯入分頁時發生錯誤', error);
+      }
+    }
+
+    if (openedCount) {
+      showToast(`已匯入 ${openedCount} 個分頁`);
+      await refreshTabs();
+    } else {
+      showToast('沒有成功匯入的分頁');
+    }
+  } catch (error) {
+    console.error('匯入檔案時發生錯誤', error);
+    showToast('匯入時發生錯誤');
+  }
+}
+
 function setupEventListeners() {
   refreshButton.addEventListener('click', refreshTabs);
   searchInput.addEventListener('input', applyFilterAndRender);
@@ -339,6 +400,14 @@ function setupEventListeners() {
   sortSelect.addEventListener('change', () => {
     state.sorting = sortSelect.value;
     applyFilterAndRender();
+  });
+  importButton.addEventListener('click', () => {
+    importInput.value = '';
+    importInput.click();
+  });
+  importInput.addEventListener('change', (event) => {
+    const [file] = event.target.files || [];
+    importFromJsonFile(file);
   });
   exportButton.addEventListener('click', exportToJson);
   document.addEventListener('visibilitychange', () => {

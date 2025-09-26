@@ -258,6 +258,14 @@ select {
   color: var(--md-outline);
 }
 
+.toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-left: auto;
+  align-items: center;
+}
+
 main {
   padding: 1.6rem clamp(1.6rem, 4vw, 3.2rem) 3rem;
 }
@@ -402,6 +410,11 @@ main {
   select,
   .md-button {
     width: 100%;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+    justify-content: stretch;
   }
 }
 

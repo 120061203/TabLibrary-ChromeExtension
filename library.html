@@ -43,9 +43,15 @@
           <option value="domain-asc">網域 A → Z</option>
         </select>
       </label>
-      <button id="export-button" class="md-button md-button--filled" type="button">
-        匯出 JSON
-      </button>
+      <div class="toolbar-actions">
+        <button id="import-button" class="md-button md-button--tonal" type="button">
+          匯入 JSON
+        </button>
+        <button id="export-button" class="md-button md-button--filled" type="button">
+          匯出 JSON
+        </button>
+        <input id="import-input" type="file" accept="application/json" hidden />
+      </div>
     </section>
 
     <main>
