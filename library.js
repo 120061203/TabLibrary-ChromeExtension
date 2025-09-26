@@ -152,6 +152,10 @@ async function hydrateWindowInfo(tabs) {
 }
 
 async function hydrateTabGroupInfo(tabs) {
+  if (!chrome.tabGroups || typeof chrome.tabGroups.get !== 'function') {
+    state.tabGroupInfo = new Map();
+    return;
+  }
   const uniqueGroupIds = [...new Set(tabs.map((tab) => tab.groupId).filter((id) => id && id !== -1))];
   const entries = await Promise.all(
     uniqueGroupIds.map(async (groupId) => {
@@ -583,6 +587,10 @@ async function bulkMoveToNewWindow() {
 
 async function bulkCreateGroup() {
   if (!state.selectedTabIds.size) {
+    return;
+  }
+  if (!chrome.tabs.group || !chrome.tabGroups || typeof chrome.tabGroups.update !== 'function') {
+    showToast('此瀏覽器版本不支援分頁群組功能');
     return;
   }
   const title = window.prompt('請輸入新的分頁群組名稱', 'TabLibrary');
