@@ -71,16 +71,40 @@ function getUrlKey(url) {
   }
 }
 
-function storageGet(keys) {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(keys, resolve);
-  });
+const hasChromeStorageSync = Boolean(chrome.storage && chrome.storage.sync);
+
+function storageGet(key) {
+  if (hasChromeStorageSync) {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(key, resolve);
+    });
+  }
+
+  try {
+    const raw = window.localStorage.getItem(key);
+    const value = raw ? JSON.parse(raw) : undefined;
+    return Promise.resolve({ [key]: value });
+  } catch (error) {
+    console.error('讀取本地儲存時發生錯誤', error);
+    return Promise.resolve({ [key]: undefined });
+  }
 }
 
 function storageSet(items) {
-  return new Promise((resolve) => {
-    chrome.storage.sync.set(items, resolve);
-  });
+  if (hasChromeStorageSync) {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set(items, resolve);
+    });
+  }
+
+  try {
+    Object.entries(items).forEach(([key, value]) => {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    });
+  } catch (error) {
+    console.error('寫入本地儲存時發生錯誤', error);
+  }
+  return Promise.resolve();
 }
 
 function syncSelectionWithTabs() {
