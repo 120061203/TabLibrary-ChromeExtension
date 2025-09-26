@@ -23,6 +23,16 @@ const state = {
   windowInfo: new Map()
 };
 
+function formatTimestampForExport(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+  const second = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
+
 function showToast(message, timeout = 2500) {
   toast.textContent = message;
   toast.hidden = false;
@@ -307,8 +317,12 @@ async function exportToJson() {
     return;
   }
 
+  const now = new Date();
+  const timestamp = formatTimestampForExport(now);
+  const safeTimestamp = timestamp.replace(/[-:\s]/g, '');
+
   const data = {
-    exportedAt: new Date().toISOString(),
+    exportedAt: timestamp,
     tabs: state.filteredTabs.map((tab) => ({
       title: tab.title,
       url: tab.url,
@@ -323,7 +337,7 @@ async function exportToJson() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `tablibrary-${Date.now()}.json`;
+  link.download = `tablibrary-${safeTimestamp}.json`;
   document.body.appendChild(link);
   link.click();
   link.remove();
