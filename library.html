@@ -67,7 +67,10 @@
     </template>
 
     <template id="tab-card-template">
-      <article class="tab-card md-card">
+      <article class="tab-card md-card" tabindex="0">
+        <button class="close-button md-icon-button" type="button" aria-label="關閉分頁">
+          ✕
+        </button>
         <header>
           <img class="favicon" alt="" />
           <div class="tab-texts">
@@ -77,14 +80,6 @@
         </header>
         <footer>
           <span class="tab-meta"></span>
-          <div class="tab-actions">
-            <button class="focus-button md-button md-button--tonal" type="button">
-              切換
-            </button>
-            <button class="close-button md-button md-button--error" type="button">
-              關閉
-            </button>
-          </div>
         </footer>
       </article>
     </template>

@@ -210,11 +210,11 @@ function renderTabs(groups) {
 
 function createTabCard(tab) {
   const clone = tabCardTemplate.content.firstElementChild.cloneNode(true);
+  clone.setAttribute('role', 'button');
   const titleElement = clone.querySelector('.tab-title');
   const urlElement = clone.querySelector('.tab-url');
   const metaElement = clone.querySelector('.tab-meta');
   const faviconImg = clone.querySelector('.favicon');
-  const focusButton = clone.querySelector('.focus-button');
   const closeButton = clone.querySelector('.close-button');
 
   const titleText = tab.title?.trim() || '未命名分頁';
@@ -235,8 +235,29 @@ function createTabCard(tab) {
   details.push(`最後瀏覽：${formatRelativeTime(tab.lastAccessed)}`);
   metaElement.textContent = details.join(' · ');
 
-  focusButton.addEventListener('click', () => focusTab(tab));
-  closeButton.addEventListener('click', () => closeTab(tab));
+  clone.addEventListener('click', (event) => {
+    if (event.target.closest('.close-button')) {
+      return;
+    }
+    focusTab(tab);
+  });
+
+  clone.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      focusTab(tab);
+    }
+  });
+
+  closeButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const message = `要關閉「${titleText}」這個分頁嗎？`;
+    const confirmed = window.confirm(message);
+    if (!confirmed) {
+      return;
+    }
+    closeTab(tab);
+  });
 
   return clone;
 }

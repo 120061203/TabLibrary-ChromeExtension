@@ -168,6 +168,17 @@ select {
   box-shadow: 0 1px 3px color-mix(in srgb, var(--md-outline) 20%, transparent);
 }
 
+.focus-button {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--md-primary) 75%, #132b26),
+      var(--md-primary));
+  color: var(--md-on-primary);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--md-primary) 24%, transparent);
+}
+
+.focus-button::after {
+  background: color-mix(in srgb, var(--md-on-primary) 18%, transparent);
+}
+
 .md-button--error {
   background: linear-gradient(135deg, color-mix(in srgb, var(--md-error-container) 85%, #2f1716),
       var(--md-error-container));
@@ -176,8 +187,53 @@ select {
   box-shadow: 0 1px 3px color-mix(in srgb, var(--md-error) 16%, transparent);
 }
 
+.close-button {
+  color: var(--md-on-error-container);
+}
+
 .md-button--error::after {
   background: color-mix(in srgb, var(--md-on-error-container) 16%, transparent);
+}
+
+.md-icon-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--md-secondary-container) 82%, #0d141f);
+  color: color-mix(in srgb, var(--md-on-surface) 92%, transparent);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.md-icon-button:hover {
+  background: color-mix(in srgb, var(--md-secondary-container) 88%, #142033);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--md-outline) 24%, transparent);
+}
+
+.md-icon-button:active {
+  background: color-mix(in srgb, var(--md-secondary-container) 70%, #0d141f);
+}
+
+.close-button {
+  background: color-mix(in srgb, var(--md-error-container) 85%, #2b1414);
+  color: var(--md-on-error-container);
+}
+
+.close-button:hover {
+  background: color-mix(in srgb, var(--md-error-container) 94%, #3a1b1b);
+}
+
+.close-button:active {
+  background: color-mix(in srgb, var(--md-error-container) 70%, #2b1414);
 }
 
 .toolbar {
@@ -254,16 +310,23 @@ main {
 }
 
 .tab-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  padding: 1.2rem;
+  padding: 1.4rem 1.2rem 1.2rem;
+  cursor: pointer;
 }
 
 .tab-card header {
   display: flex;
   gap: 0.9rem;
   align-items: center;
+}
+
+.tab-card:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--md-primary) 36%, transparent);
+  outline-offset: 3px;
 }
 
 .favicon {
@@ -295,24 +358,13 @@ main {
 
 .tab-card footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.8rem;
+  justify-content: flex-end;
 }
 
 .tab-meta {
+  margin-right: auto;
   font-size: 0.78rem;
   color: color-mix(in srgb, var(--md-outline) 82%, transparent);
-}
-
-.tab-actions {
-  display: flex;
-  gap: 0.6rem;
-}
-
-.tab-actions .md-button {
-  min-width: 84px;
-  padding: 0 1rem;
 }
 
 .empty-state {
