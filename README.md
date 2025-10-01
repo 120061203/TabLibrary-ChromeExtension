@@ -13,7 +13,7 @@ Tab Library 是一款 Chrome 擴充功能，協助你將目前開啟的所有分
 ## 安裝方式
 1. 下載此專案原始碼或使用 `git clone`：
    ```bash
-   git clone git@github.com:120061203/TabLibrary-ChromeExtentsion.git
+   git clone git@github.com:120061203/TabLibrary-ChromeExtension.git
    ```
 2. 開啟 Chrome 瀏覽器並前往 `chrome://extensions`。
 3. 右上角開啟「開發人員模式」。
